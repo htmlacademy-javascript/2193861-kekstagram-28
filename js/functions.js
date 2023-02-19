@@ -1,5 +1,5 @@
 // Функция для проверки длины строки
-export function checkStringLength (string, length) {
+function checkStringLength (string, length) {
   if (string.length <= length) {
     return true;
   }
@@ -7,9 +7,11 @@ export function checkStringLength (string, length) {
   return false;
 }
 
+checkStringLength('htmlacademy', 18);
+
 // Функция для проверки является ли строка палиндромом
 
-export function checkPalindrome (string) {
+function checkPalindrome (string) {
   let check = '';
 
   for (let i = string.length - 1; i >= 0; i--) {
@@ -23,9 +25,11 @@ export function checkPalindrome (string) {
   return false;
 }
 
+checkPalindrome('топот');
+
 // Функция, которая принимает строку, извлекает содержащиеся в ней цифры от 0 до 9
 
-export function findInteger (string) {
+function findInteger (string) {
   if(string.match(/\d+/)) {
     return string.replace(/\D/g, '');
   } else {
@@ -33,11 +37,12 @@ export function findInteger (string) {
   }
 }
 
+findInteger('ECMAScript 2022');
+
 //  Функция, которая принимает три параметра: исходную строку, минимальную длину и строку с добавочными символами — и возвращает исходную строку, дополненную указанными символами до заданной длины.
-export function createFilePath (initial, minLength, additional) {
+function createFilePath (initial, minLength, additional) {
   let repeatTimes = (minLength - initial.length) / additional.length;
   if (initial.length < minLength && additional.length < minLength) {
-    // additiional * количество повторов символов до заданной длины строки + initial;
     while (repeatTimes > 0) {
       if(initial.length <= additional.length) {
         additional = additional.slice(0, (repeatTimes)) + additional;
@@ -54,6 +59,12 @@ export function createFilePath (initial, minLength, additional) {
     return additional + initial;
   }
   if (initial.length > minLength) {
-    return initial.slice(0, minLength);
+    return initial;
   }
 }
+
+createFilePath('1', 2, '0');
+createFilePath('1', 4, '0');
+createFilePath('q', 4, 'werty');
+createFilePath('q', 4, 'we');
+createFilePath('qwerty', 4, '0');

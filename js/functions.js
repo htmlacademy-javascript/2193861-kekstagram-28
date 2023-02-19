@@ -1,5 +1,5 @@
 // Функция для проверки длины строки
-function checkStringLength (string, length) {
+export function checkStringLength (string, length) {
   if (string.length <= length) {
     return true;
   }
@@ -9,7 +9,7 @@ function checkStringLength (string, length) {
 
 // Функция для проверки является ли строка палиндромом
 
-function checkPalindrome (string) {
+export function checkPalindrome (string) {
   let check = '';
 
   for (let i = string.length - 1; i >= 0; i--) {
@@ -25,7 +25,7 @@ function checkPalindrome (string) {
 
 // Функция, которая принимает строку, извлекает содержащиеся в ней цифры от 0 до 9
 
-function findInteger (string) {
+export function findInteger (string) {
   if(string.match(/\d+/)) {
     return string.replace(/\D/g, '');
   } else {
@@ -34,7 +34,7 @@ function findInteger (string) {
 }
 
 //  Функция, которая принимает три параметра: исходную строку, минимальную длину и строку с добавочными символами — и возвращает исходную строку, дополненную указанными символами до заданной длины.
-function createFilePath (initial, minLength, additional) {
+export function createFilePath (initial, minLength, additional) {
   let repeatTimes = (minLength - initial.length) / additional.length;
   if (initial.length < minLength && additional.length < minLength) {
     // additiional * количество повторов символов до заданной длины строки + initial;

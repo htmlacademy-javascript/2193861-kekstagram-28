@@ -1,7 +1,7 @@
 const NUMBER_OF_POSTS = 25;
 const MIN_LIKES = 15;
 const MAX_LIKES = 200;
-const MAX_COMMENTS = 1000;
+const MAX_COMMENTS = 100;
 const MIN_AVATAR_INDEX = 1;
 const MAX_AVATAR_INDEX = 6;
 const messages = ['Всё отлично!',
@@ -43,6 +43,9 @@ const getLikesCount = (minLikes, maxLikes) => Math.floor(Math.random() * ((maxLi
 // функция для генерации id комментария
 const getCommentId = (maxComments) => Math.floor(Math.random() * maxComments);
 
+// функция для генерации количества комментариев
+const getCommentsCount = (maxComments) => Math.floor(Math.random() * maxComments);
+
 // функция для генерации пути до файла с аватаром
 const getAvatar = (minAvatarIndex, maxAvatarIndex) => `img/avatar-${Math.ceil(Math.random() * ((maxAvatarIndex - minAvatarIndex) + minAvatarIndex))}.svg`;
 
@@ -53,17 +56,20 @@ const getMessage = (messageArray) => messageArray[Math.floor(Math.random() * (me
 const getName = (nameArray) => nameArray[Math.floor(Math.random() * (nameArray.length - 1))];
 
 // Функция для генерации массива с постами
-const createPosts = id.map((currentValue, index) => ({
+
+const createComments = () => (
+  {id: getCommentId(MAX_COMMENTS),
+    avatar: getAvatar(MIN_AVATAR_INDEX, MAX_AVATAR_INDEX),
+    message: getMessage(messages),
+    name: getName(names)}
+);
+
+const createPosts = Array.from(id.map((currentValue, index) => ({
   id: currentValue,
   url: url[index],
   description: descriptions[index],
   likes: getLikesCount(MIN_LIKES, MAX_LIKES),
-  comments: {
-    id: getCommentId(MAX_COMMENTS),
-    avatar: getAvatar(MIN_AVATAR_INDEX, MAX_AVATAR_INDEX),
-    message: getMessage(messages),
-    name: getName(names)
-  },
-}));
+  comments: Array.from({length: getCommentsCount(MAX_COMMENTS)}, createComments),
+})));
 
 export {createPosts};

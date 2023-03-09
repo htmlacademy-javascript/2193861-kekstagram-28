@@ -1,19 +1,42 @@
+import { commentsListElement, onClickOpen, onClickClose, renderBigPicture, closeButton, bigPictureContainerElement } from './big-picture-render.js';
 import { createPosts } from './data.js';
+import { renderCommentItems } from './comment-list-render.js';
 
-const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
 
-const pictureList = document.querySelector('.pictures');
+const pictureListElement = document.querySelector('.pictures');
 
 const pictureListFragment = document.createDocumentFragment();
 
 createPosts.forEach((createPost) => {
-  const pictureElement = pictureTemplate.cloneNode(true);
+  const pictureElement = pictureTemplateElement.cloneNode(true);
   pictureElement.querySelector('.picture__img').src = createPost.url;
-  const pictureInfo = pictureElement.querySelector('.picture__info');
-  pictureInfo.querySelector('.picture__comments').textContent = createPost.comments.id;
-  pictureInfo.querySelector('.picture__likes').textContent = createPost.likes;
+  const pictureInfoElement = pictureElement.querySelector('.picture__info');
+  pictureInfoElement.querySelector('.picture__comments').textContent = createPost.comments.length;
+  pictureInfoElement.querySelector('.picture__likes').textContent = createPost.likes;
+
+  pictureElement.addEventListener('click', (evt) => {
+    commentsListElement.innerHTML = '';
+    onClickOpen(evt);
+    renderBigPicture(createPost.url, createPost.likes, createPost.comments.length, createPost.description);
+    createPost.comments.forEach((comment) => {
+      renderCommentItems(comment.avatar, comment.name, comment.message);
+    });
+  });
 
   pictureListFragment.append(pictureElement);
 });
 
-pictureList.append(pictureListFragment);
+pictureListElement.append(pictureListFragment);
+
+closeButton.addEventListener('click', onClickClose);
+
+document.addEventListener('click', (evt) => {
+  if (evt.key === 'Escape') {
+    evt.preventDefault();
+    bigPictureContainerElement.classList.add('hidden');
+    document.body.classList.remove('modal-open');
+  }
+});
+
+export { pictureListElement };

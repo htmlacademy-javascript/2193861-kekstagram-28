@@ -6,4 +6,4 @@ import './post-view.js';
 import './proceed-data.js';
 import './util.js';
 import './big-picture-render.js';
-import './gallery.js';
+import './thumbnail-render.js';

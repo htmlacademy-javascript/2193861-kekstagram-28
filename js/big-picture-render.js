@@ -38,16 +38,13 @@ const renderCommentList = (avatar, username, message) => {
 const renderShownCommentsList = (comments) => {
   const shownComments = comments.slice(0,5);
   shownComments.forEach(({avatar, username, message}) => renderCommentList(avatar, username, message));
-  console.log(shownComments);
   commentsCountElement.firstChild.textContent = `${commentsListElement.children.length} из `;
   const onCommentLoad = (evt) => {
     evt.preventDefault();
     const otherComments = comments.slice(commentsListElement.children.length, commentsListElement.children.length + COMMENTS_SHOWN_QUANTITY);
-    console.log(otherComments);
     otherComments.forEach(({avatar, username, message}) => renderCommentList(avatar, username, message));
     if (otherComments.length === 0) {
       commentsLoaderButtonElement.classList.add('hidden');
-      console.log('no more comments');
     }
     commentsCountElement.firstChild.textContent = `${commentsListElement.children.length} из `;
   };

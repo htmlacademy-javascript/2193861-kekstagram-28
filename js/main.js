@@ -5,5 +5,5 @@ import './post-upload.js';
 import './post-view.js';
 import './proceed-data.js';
 import './util.js';
-import './thumbnail-render.js';
 import './big-picture-render.js';
+import './gallery.js';

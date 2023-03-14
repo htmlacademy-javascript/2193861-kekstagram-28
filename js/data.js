@@ -64,12 +64,12 @@ const createComments = () => (
     name: getName(names)}
 );
 
-const createPosts = Array.from(id.map((currentValue, index) => ({
+const createPosts = () => id.map((currentValue, index) => ({
   id: currentValue,
   url: url[index],
   description: descriptions[index],
   likes: getLikesCount(MIN_LIKES, MAX_LIKES),
   comments: Array.from({length: getCommentsCount(MAX_COMMENTS)}, createComments),
-})));
+}));
 
 export {createPosts};

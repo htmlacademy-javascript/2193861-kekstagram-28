@@ -1,42 +1,40 @@
-import { commentsListElement, onClickOpen, onClickClose, renderBigPicture, closeButton, bigPictureContainerElement } from './big-picture-render.js';
+import { bigPictureContainerElement, renderBigPicture, renderShownCommentsList } from './big-picture-render.js';
 import { createPosts } from './data.js';
-import { renderCommentItems } from './comment-list-render.js';
 
 const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
 
 const pictureListElement = document.querySelector('.pictures');
 
-const pictureListFragment = document.createDocumentFragment();
+const similarPosts = createPosts();
 
-createPosts.forEach((createPost) => {
-  const pictureElement = pictureTemplateElement.cloneNode(true);
-  pictureElement.querySelector('.picture__img').src = createPost.url;
-  const pictureInfoElement = pictureElement.querySelector('.picture__info');
-  pictureInfoElement.querySelector('.picture__comments').textContent = createPost.comments.length;
-  pictureInfoElement.querySelector('.picture__likes').textContent = createPost.likes;
+const renderThumbnailList = (posts) => {
+  const pictureElementFragment = document.createDocumentFragment();
 
-  pictureElement.addEventListener('click', (evt) => {
-    commentsListElement.innerHTML = '';
-    onClickOpen(evt);
-    renderBigPicture(createPost.url, createPost.likes, createPost.comments.length, createPost.description);
-    createPost.comments.forEach((comment) => {
-      renderCommentItems(comment.avatar, comment.name, comment.message);
-    });
+  posts.forEach(({ url, description, likes, comments}) => {
+    const pictureElement = pictureTemplateElement.cloneNode(true);
+    pictureElement.querySelector('.picture__img').src = url;
+    pictureElement.querySelector('.picture__img').alt = description;
+    const pictureInfoElement = pictureElement.querySelector('.picture__info');
+    pictureInfoElement.querySelector('.picture__comments').textContent = comments.length;
+    pictureInfoElement.querySelector('.picture__likes').textContent = likes;
+    pictureElementFragment.append(pictureElement);
+
+    const onThumbnailOpen = (evt) => {
+      evt.preventDefault();
+      bigPictureContainerElement.classList.remove('hidden');
+      document.body.classList.add('modal-open');
+      renderShownCommentsList(comments);
+      renderBigPicture(url, likes, description, comments);
+    };
+
+    pictureElement.addEventListener('click', onThumbnailOpen);
   });
 
-  pictureListFragment.append(pictureElement);
-});
+  const pictureListFragment = document.createDocumentFragment();
+  pictureListFragment.append(pictureElementFragment);
+  pictureListElement.append(pictureListFragment);
+};
 
-pictureListElement.append(pictureListFragment);
+renderThumbnailList(similarPosts);
 
-closeButton.addEventListener('click', onClickClose);
-
-document.addEventListener('click', (evt) => {
-  if (evt.key === 'Escape') {
-    evt.preventDefault();
-    bigPictureContainerElement.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-  }
-});
-
-export { pictureListElement };
+export { renderThumbnailList, similarPosts, pictureListElement };

@@ -1,4 +1,4 @@
-import { bigPictureContainerElement, renderBigPicture, commentsListElement, renderShownCommentsList } from './big-picture-render.js';
+import { bigPictureContainerElement, renderBigPicture, renderShownCommentsList } from './big-picture-render.js';
 import { createPosts } from './data.js';
 
 const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
@@ -23,26 +23,18 @@ const renderThumbnailList = (posts) => {
       evt.preventDefault();
       bigPictureContainerElement.classList.remove('hidden');
       document.body.classList.add('modal-open');
-      commentsListElement.innerHTML = '';
       renderShownCommentsList(comments);
       renderBigPicture(url, likes, description, comments);
     };
 
     pictureElement.addEventListener('click', onThumbnailOpen);
   });
+
   const pictureListFragment = document.createDocumentFragment();
   pictureListFragment.append(pictureElementFragment);
   pictureListElement.append(pictureListFragment);
 };
 
 renderThumbnailList(similarPosts);
-
-document.addEventListener('click', (evt) => {
-  if (evt.key === 'Escape') {
-    evt.preventDefault();
-    bigPictureContainerElement.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-  }
-});
 
 export { renderThumbnailList, similarPosts, pictureListElement };

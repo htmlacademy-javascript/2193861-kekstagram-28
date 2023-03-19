@@ -29,9 +29,9 @@ const onSubmitForm = (evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
   if (isValid) {
-    document.querySelector('.img-upload__text').textContent = 'можно отправлять';
+    document.querySelector('.img-upload__text').firstChild.textContent = 'можно отправлять';
   } else {
-    document.querySelector('.img-upload__text').textContent = 'форма невалидна';
+    document.querySelector('.img-upload__text').firstChild.textContent = 'форма невалидна';
   }
 };
 

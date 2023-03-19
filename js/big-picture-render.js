@@ -1,3 +1,6 @@
+import { isEscapeKey } from './util.js';
+
+const COMMENTS_SHOWN_QUANTITY = 5;
 const bigPictureContainerElement = document.querySelector('.big-picture');
 
 const bigPictureImageElement = bigPictureContainerElement.querySelector('.big-picture__img').querySelector('img');
@@ -15,8 +18,6 @@ const commentsListElement = bigPictureImageContentElement.querySelector('.social
 const commentTemplateElement = bigPictureImageContentElement.querySelector('.social__comment');
 const commentsCountElement = bigPictureImageContentElement.querySelector('.social__comment-count');
 const commentsLoaderButtonElement = bigPictureImageContentElement.querySelector('.comments-loader');
-
-const COMMENTS_SHOWN_QUANTITY = 5;
 
 const renderCommentList = (avatar, username, message) => {
   const commentFragment = document.createDocumentFragment();
@@ -70,8 +71,8 @@ const renderShownCommentsList = (comments) => {
 
   closeButton.addEventListener('click', onClickClose);
 
-  document.addEventListener('click', (evt) => {
-    if (evt.key === 'Escape') {
+  document.addEventListener('keydown', (evt) => {
+    if (isEscapeKey(evt)) {
       evt.preventDefault();
       onClickClose(evt);
     }

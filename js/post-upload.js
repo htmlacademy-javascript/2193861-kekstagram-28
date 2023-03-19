@@ -1,3 +1,5 @@
+import { isEscapeKey } from './util.js';
+
 const imageUploadFormElement = document.querySelector('.img-upload__form');
 const fileUploadControlElement = document.querySelector('#upload-file');
 const imageUploadOverlayElement = document.querySelector('.img-upload__overlay');
@@ -19,14 +21,14 @@ fileUploadControlElement.addEventListener('change', onFileUploadOpen);
 fileUploadCloseButtonElement.addEventListener('click', onFileUploadClose);
 
 document.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
+  if (isEscapeKey(evt)) {
     evt.preventDefault();
     onFileUploadClose();
   }
 });
 
 inputsElements.forEach((input) => input.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
+  if (isEscapeKey(evt)) {
     evt.preventDefault();
     evt.stopPropagation();
   }

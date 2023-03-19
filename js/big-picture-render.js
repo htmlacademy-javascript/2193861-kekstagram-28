@@ -1,3 +1,5 @@
+import { isEscapeKey } from './util.js';
+
 const COMMENTS_SHOWN_QUANTITY = 5;
 const bigPictureContainerElement = document.querySelector('.big-picture');
 
@@ -70,7 +72,7 @@ const renderShownCommentsList = (comments) => {
   closeButton.addEventListener('click', onClickClose);
 
   document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
+    if (isEscapeKey(evt)) {
       evt.preventDefault();
       onClickClose(evt);
     }

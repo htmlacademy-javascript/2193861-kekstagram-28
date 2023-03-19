@@ -59,3 +59,8 @@ createFilePath('1', 4, '0');
 createFilePath('q', 4, 'werty');
 createFilePath('q', 4, 'we');
 createFilePath('qwerty', 4, '0');
+
+// проверка Escape
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {isEscapeKey};

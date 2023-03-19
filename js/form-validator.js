@@ -1,5 +1,5 @@
+const HASHTAGS_COUNT = 5;
 const imageUploadFormElement = document.querySelector('.img-upload__form');
-
 
 const pristine = new Pristine(imageUploadFormElement);
 
@@ -14,10 +14,8 @@ const validateHashtag = () => {
     return true;
   }
 
-  if (hashtagsArray.length <= 5) {
-    if (hashtagsArray.length === uniqueHashtagsArray.size) {
-      return hashtagsArray.some((hashtag) => hashtagRegExp.test(hashtag));
-    }
+  if (hashtagsArray.length <= HASHTAGS_COUNT && hashtagsArray.length === uniqueHashtagsArray.size) {
+    return hashtagsArray.some((hashtag) => hashtagRegExp.test(hashtag));
   } else {
     return false;
   }

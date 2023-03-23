@@ -1,3 +1,5 @@
+import { scaleReset } from './post-edit.js';
+import { filterReset } from './post-filter.js';
 import { isEscapeKey } from './util.js';
 
 const imageUploadFormElement = document.querySelector('.img-upload__form');
@@ -15,6 +17,8 @@ const onFileUploadClose = () => {
   imageUploadOverlayElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
   imageUploadFormElement.reset();
+  scaleReset();
+  filterReset();
 };
 
 fileUploadControlElement.addEventListener('change', onFileUploadOpen);
@@ -34,3 +38,4 @@ inputsElements.forEach((input) => input.addEventListener('keydown', (evt) => {
   }
 }));
 
+export {onFileUploadClose};

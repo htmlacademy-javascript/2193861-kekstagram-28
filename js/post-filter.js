@@ -5,6 +5,14 @@ const effectControlContainerElement = document.querySelector('.img-upload__effec
 const effectLevelSliderElement = document.querySelector('.effect-level__slider');
 const effectLevelValueElement = document.querySelector('.effect-level__value');
 
+const filterValues = {
+  SEPIA: 'sepia',
+  MARVIN: 'marvin',
+  PHOBOS: 'phobos',
+  HEAT: 'heat',
+  NONE: 'none'
+};
+
 effectLevelValueElement.value = 1;
 effectControlContainerElement.classList.add('hidden');
 
@@ -18,9 +26,15 @@ noUiSlider.create(effectLevelSliderElement, {
   connect: 'lower',
 });
 
+const filterReset = () => {
+  imagePreviewElement.classList = '';
+  imagePreviewElement.style.filter = '';
+  effectControlContainerElement.classList.add('hidden');
+};
+
 const onFilterChange = (evt) => {
   imagePreviewElement.classList = `effects__preview--${evt.target.value}`;
-  if (evt.target.value === 'none') {
+  if (evt.target.value === filterValues.NONE) {
     imagePreviewElement.classList = '';
     imagePreviewElement.style.filter = '';
     effectControlContainerElement.classList.add('hidden');
@@ -34,7 +48,7 @@ const onFilterChange = (evt) => {
       step: 0.1,
     });
     effectControlContainerElement.classList.remove('hidden');
-  } else if (evt.target.value === 'sepia') {
+  } else if (evt.target.value === filterValues.SEPIA) {
     effectLevelSliderElement.noUiSlider.updateOptions({
       range: {
         min: 0,
@@ -43,7 +57,8 @@ const onFilterChange = (evt) => {
       start: 1,
       step: 0.1,
     });
-  } else if (evt.target.value === 'marvin') {
+    effectControlContainerElement.classList.remove('hidden');
+  } else if (evt.target.value === filterValues.MARVIN) {
     effectLevelSliderElement.noUiSlider.updateOptions({
       range: {
         min: 0,
@@ -53,7 +68,7 @@ const onFilterChange = (evt) => {
       step: 1,
     });
     effectControlContainerElement.classList.remove('hidden');
-  } else if (evt.target.value === 'phobos') {
+  } else if (evt.target.value === filterValues.PHOBOS) {
     effectLevelSliderElement.noUiSlider.updateOptions({
       range: {
         min: 0,
@@ -63,7 +78,7 @@ const onFilterChange = (evt) => {
       step: 0.1,
     });
     effectControlContainerElement.classList.remove('hidden');
-  } else if (evt.target.value === 'heat') {
+  } else if (evt.target.value === filterValues.HEAT) {
     effectLevelSliderElement.noUiSlider.updateOptions({
       range: {
         min: 0,
@@ -92,5 +107,6 @@ effectLevelSliderElement.noUiSlider.on('update', () => {
   }
 });
 
-
 effectControlListElement.addEventListener('change', onFilterChange);
+
+export {filterReset};

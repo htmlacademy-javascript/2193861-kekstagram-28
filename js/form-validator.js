@@ -1,9 +1,68 @@
+import { sendData } from './api.js';
+import { scaleReset } from './post-edit.js';
+import { filterReset } from './post-filter.js';
+import { isEscapeKey, showAlert } from './util.js';
+
 const HASHTAGS_COUNT = 5;
 const imageUploadFormElement = document.querySelector('.img-upload__form');
+const successMessageTemplateElement = document.querySelector('#success').content.querySelector('.success');
+const successButtonElement = successMessageTemplateElement.querySelector('.success__button');
+const errorMessageTemplateElement = document.querySelector('#error').content.querySelector('.error');
+const errorButtonElement = errorMessageTemplateElement.querySelector('.error__button');
+const submitButtonElement = imageUploadFormElement.querySelector('.img-upload__submit');
+
+const submitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикация...'
+};
 
 const pristine = new Pristine(imageUploadFormElement);
 
 const hashtagRegExp = /^#[a-zа-яё0-9]{1,19}$/i;
+
+const hideSuccessMessage = () => successMessageTemplateElement.remove();
+const hideErrorMessage = () => errorMessageTemplateElement.remove();
+
+successButtonElement.addEventListener('click', hideSuccessMessage);
+errorButtonElement.addEventListener('click', hideErrorMessage);
+
+window.addEventListener('click', hideSuccessMessage);
+window.addEventListener('click', hideErrorMessage);
+
+document.addEventListener('keydown', (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    hideSuccessMessage();
+  }
+});
+
+document.addEventListener('keydown', (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    hideErrorMessage();
+  }
+});
+
+const onUploadReset = () => {
+  imageUploadFormElement.reset();
+  scaleReset();
+  filterReset();
+  document.body.append(successMessageTemplateElement);
+};
+
+const onError = () => {
+  document.body.append(errorMessageTemplateElement);
+};
+
+const blockSubmitButton = () => {
+  submitButtonElement.disabled = true;
+  submitButtonElement.textContent = submitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButtonElement.disabled = false;
+  submitButtonElement.textContent = submitButtonText.IDLE;
+};
 
 const validateHashtag = () => {
   const hashtagInputValueElement = imageUploadFormElement.querySelector('.text__hashtags').value;
@@ -26,10 +85,21 @@ pristine.addValidator(imageUploadFormElement.querySelector('.text__hashtags'), v
 const onSubmitForm = (evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
+
   if (isValid) {
-    document.querySelector('.img-upload__text').firstChild.textContent = 'можно отправлять';
-  } else {
-    document.querySelector('.img-upload__text').firstChild.textContent = 'форма невалидна';
+    blockSubmitButton();
+    const formData = new FormData(evt.target);
+
+    sendData(formData)
+      .then((response) => {
+        if (response.ok) {
+          onUploadReset();
+        } else {
+          onError();
+        }
+      })
+      .catch(showAlert('Ошибка! Попробуйте позже'))
+      .finally(unblockSubmitButton);
   }
 };
 

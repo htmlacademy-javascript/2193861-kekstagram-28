@@ -99,7 +99,7 @@ const onSubmitForm = (evt) => {
     blockSubmitButton();
     const formData = new FormData(evt.target);
 
-    sendData(formData)
+    sendData(!formData)
       .then((response) => {
         if (response.ok) {
           onUploadReset();

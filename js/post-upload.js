@@ -1,3 +1,4 @@
+import { errorMessageTemplateElement } from './form-validator.js';
 import { imagePreviewElement, scaleReset } from './post-edit.js';
 import { filterReset } from './post-filter.js';
 import { isEscapeKey } from './util.js';
@@ -29,6 +30,15 @@ const onFileUploadClose = () => {
   scaleReset();
   filterReset();
 };
+
+document.addEventListener('keydown', (evt) => {
+  if (isEscapeKey(evt) && errorMessageTemplateElement !== document.body.lastChild) {
+    evt.preventDefault();
+    onFileUploadClose();
+  } else {
+    evt.preventDefault();
+  }
+});
 
 const onFileUploadOpen = () => {
   imageUploadOverlayElement.classList.remove('hidden');

@@ -1,10 +1,13 @@
 import { sendData } from './api.js';
 import { scaleReset } from './post-edit.js';
 import { filterReset } from './post-filter.js';
+import { onFileUploadClose } from './post-upload.js';
 import { isEscapeKey, showAlert } from './util.js';
 
 const HASHTAGS_COUNT = 5;
 const imageUploadFormElement = document.querySelector('.img-upload__form');
+const imageUploadTextContainer = document.querySelector('.img-upload__text');
+const hashtagInputElement = imageUploadFormElement.querySelector('.text__hashtags');
 const successMessageTemplateElement = document.querySelector('#success').content.querySelector('.success');
 const successButtonElement = successMessageTemplateElement.querySelector('.success__button');
 const errorMessageTemplateElement = document.querySelector('#error').content.querySelector('.error');
@@ -16,7 +19,11 @@ const submitButtonText = {
   SENDING: 'Публикация...'
 };
 
-const pristine = new Pristine(imageUploadFormElement);
+const pristine = new Pristine(imageUploadFormElement, {
+  classTo: 'img-upload__text',
+  errorTextParent: 'img-upload__text',
+  errorTextClass: 'img-upload__error-text',
+});
 
 const hashtagRegExp = /^#[a-zа-яё0-9]{1,19}$/i;
 
@@ -29,29 +36,31 @@ errorButtonElement.addEventListener('click', hideErrorMessage);
 window.addEventListener('click', hideSuccessMessage);
 window.addEventListener('click', hideErrorMessage);
 
-document.addEventListener('keydown', (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    hideSuccessMessage();
-  }
-});
-
-document.addEventListener('keydown', (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    hideErrorMessage();
-  }
-});
-
 const onUploadReset = () => {
+  onFileUploadClose();
   imageUploadFormElement.reset();
   scaleReset();
   filterReset();
   document.body.append(successMessageTemplateElement);
+  imageUploadTextContainer.firstChild.textContent = '';
+
+  document.addEventListener('keydown', (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      hideSuccessMessage();
+    }
+  });
 };
 
 const onError = () => {
   document.body.append(errorMessageTemplateElement);
+
+  document.addEventListener('keydown', (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      hideErrorMessage();
+    }
+  });
 };
 
 const blockSubmitButton = () => {
@@ -65,7 +74,7 @@ const unblockSubmitButton = () => {
 };
 
 const validateHashtag = () => {
-  const hashtagInputValueElement = imageUploadFormElement.querySelector('.text__hashtags').value;
+  const hashtagInputValueElement = hashtagInputElement.value;
   const hashtagsArray = hashtagInputValueElement.split(' ');
   const uniqueHashtagsArray = new Set(hashtagsArray);
 
@@ -80,7 +89,7 @@ const validateHashtag = () => {
   }
 };
 
-pristine.addValidator(imageUploadFormElement.querySelector('.text__hashtags'), validateHashtag);
+pristine.addValidator(hashtagInputElement, validateHashtag, 'Хэштег должен содержать одну # в начале и текст, быть длиной до 20 символов. Максимум можно добавить 5 хэштегов через пробел.');
 
 const onSubmitForm = (evt) => {
   evt.preventDefault();
@@ -100,7 +109,11 @@ const onSubmitForm = (evt) => {
       })
       .catch(showAlert('Ошибка! Попробуйте позже'))
       .finally(unblockSubmitButton);
+  } else {
+    imageUploadTextContainer.firstChild.textContent = 'Фотография не загружена. Проверьте правивильность заполнения полей с хэштегами и комментариями';
   }
 };
 
 imageUploadFormElement.addEventListener('submit', onSubmitForm);
+
+export {errorMessageTemplateElement};

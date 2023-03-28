@@ -1,4 +1,4 @@
-const ALERT_SHOW_TIME = 5;
+const ALERT_SHOW_TIME = 2000;
 
 // Функция для проверки длины строки
 const checkStringLength = (string, length) => string.length <= length;
@@ -74,6 +74,7 @@ const showAlert = (message) => {
   alertContainer.style.right = '0';
   alertContainer.style.padding = '10px 3px';
   alertContainer.style.fontSize = '30px';
+  alertContainer.style.lineHeight = '28px';
   alertContainer.style.textAlign = 'center';
   alertContainer.style.backgroundColor = 'red';
 

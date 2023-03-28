@@ -107,13 +107,14 @@ const onSubmitForm = (evt) => {
           onError();
         }
       })
-      .catch(showAlert('Ошибка! Попробуйте позже'))
+      .catch(() => {
+        showAlert('Фотография не загружена. Попробуйте позже');
+      })
       .finally(unblockSubmitButton);
-  } else {
-    imageUploadTextContainer.firstChild.textContent = 'Фотография не загружена. Проверьте правивильность заполнения полей с хэштегами и комментариями';
   }
 };
 
 imageUploadFormElement.addEventListener('submit', onSubmitForm);
 
 export {errorMessageTemplateElement};
+

@@ -32,11 +32,9 @@ const onFileUploadClose = () => {
 };
 
 document.addEventListener('keydown', (evt) => {
-  if (isEscapeKey(evt) && errorMessageTemplateElement !== document.body.lastChild) {
+  if (isEscapeKey(evt) && (errorMessageTemplateElement !== document.body.lastChild)) {
     evt.preventDefault();
     onFileUploadClose();
-  } else {
-    evt.preventDefault();
   }
 });
 

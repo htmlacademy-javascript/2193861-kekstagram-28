@@ -21,6 +21,8 @@ const submitButtonText = {
 
 const pristine = new Pristine(imageUploadFormElement, {
   classTo: 'img-upload__text',
+  errorClass: 'img-upload__text--invalid',
+  successClass: 'img-upload__text--valid',
   errorTextParent: 'img-upload__text',
   errorTextClass: 'img-upload__error-text',
 });
@@ -73,23 +75,32 @@ const unblockSubmitButton = () => {
   submitButtonElement.textContent = submitButtonText.IDLE;
 };
 
-const validateHashtag = () => {
-  const hashtagInputValueElement = hashtagInputElement.value;
-  const hashtagsArray = hashtagInputValueElement.toLowerCase().split(' ');
-  const uniqueHashtagsArray = new Set(hashtagsArray);
+const validateHashtag = (value) => {
+  const hashtagsArray = value.toLowerCase().trim().split(' ');
 
-  if (hashtagInputValueElement === '') {
+  if (value === '') {
     return true;
   }
 
-  if (hashtagsArray.length <= HASHTAGS_COUNT && hashtagsArray.length === uniqueHashtagsArray.size) {
-    return hashtagsArray.every((hashtag) => hashtagRegExp.test(hashtag));
-  } else {
-    return false;
-  }
+  return hashtagsArray.every((hashtag) => hashtagRegExp.test(hashtag));
 };
 
-pristine.addValidator(hashtagInputElement, validateHashtag, 'Хэштег должен содержать одну # в начале и текст, быть длиной до 20 символов. Максимум можно добавить 5 хэштегов через пробел.');
+const validateHashtagUnique = (value) => {
+  const hashtagsArray = value.toLowerCase().trim().split(' ');
+  const uniqueHashtagsArray = new Set(hashtagsArray);
+
+  return hashtagsArray.length === uniqueHashtagsArray.size;
+};
+
+const validateHashtagCount = (value) => {
+  const hashtagsArray = value.toLowerCase().trim().split(' ');
+
+  return hashtagsArray.length <= HASHTAGS_COUNT;
+};
+
+pristine.addValidator(hashtagInputElement, validateHashtag, 'Хэштег должен содержать одну # в начале и буквы или цифры, быть длиной до 20 символов.');
+pristine.addValidator(hashtagInputElement, validateHashtagUnique, 'Хэштеги не могут повторяться');
+pristine.addValidator(hashtagInputElement, validateHashtagCount, 'Максимум 5 хэштегов');
 
 const onSubmitForm = (evt) => {
   evt.preventDefault();

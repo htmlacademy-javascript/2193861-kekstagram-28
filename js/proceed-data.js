@@ -1,6 +1,6 @@
 import { getData } from './api.js';
 import { renderThumbnailList } from './thumbnail-render.js';
-import { debounce } from './util.js';
+import { debounce, showAlert } from './util.js';
 const MAX_RANDOM_POSTS_SHOWN = 10;
 const RERENDER_DELAY = 500;
 
@@ -63,5 +63,6 @@ getData()
     onRandomLoad(debounce(() => renderThumbnailList(randomFilter(posts)), RERENDER_DELAY));
     onDiscussedLoad(debounce(() => renderThumbnailList(discussedFilter(posts)), RERENDER_DELAY));
   })
-  .then(() => filtersControl());
+  .then(() => filtersControl())
+  .catch(() => showAlert('Не удалось загрузить страницу, попробуйте позже'));
 

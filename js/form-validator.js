@@ -75,7 +75,7 @@ const unblockSubmitButton = () => {
 
 const validateHashtag = () => {
   const hashtagInputValueElement = hashtagInputElement.value;
-  const hashtagsArray = hashtagInputValueElement.split(' ');
+  const hashtagsArray = hashtagInputValueElement.toLowerCase().split(' ');
   const uniqueHashtagsArray = new Set(hashtagsArray);
 
   if (hashtagInputValueElement === '') {
@@ -83,7 +83,7 @@ const validateHashtag = () => {
   }
 
   if (hashtagsArray.length <= HASHTAGS_COUNT && hashtagsArray.length === uniqueHashtagsArray.size) {
-    return hashtagsArray.some((hashtag) => hashtagRegExp.test(hashtag));
+    return hashtagsArray.every((hashtag) => hashtagRegExp.test(hashtag));
   } else {
     return false;
   }
@@ -111,6 +111,8 @@ const onSubmitForm = (evt) => {
         showAlert('Фотография не загружена. Попробуйте позже');
       })
       .finally(unblockSubmitButton);
+  } else {
+    imageUploadTextContainer.firstChild.textContent = 'Проверьте правильность введеных хэштегов и комментариев';
   }
 };
 
